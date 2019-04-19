@@ -179,7 +179,7 @@ Concatenação Automatizada
 
 A concatenação automatizada para um número grande de arquivos é feita através da função `map_dfr()` do pacote `purrr` (parte do `tidyverse`).
 
-Esta função itera sobre os elementos de um vetor de entrada, chamando a cada iteração uma função com o elemento iterado, função esta que deve retornar um data frame.
+Esta função itera sobre os elementos de um vetor de entrada, chamando a cada iteração uma função com o elemento iterado, função esta que deve retornar um data frame. No caso mais simples, itera-se sobre a função `read_csv()` para cada nome de arquivo.
 
 Ao longo das iterações, `map_dfr()` vai "costurando" os data frames de saída num só e retorna-o ao fim do processo, com ótima eficiência de memória.
 
