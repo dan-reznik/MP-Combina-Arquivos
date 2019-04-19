@@ -84,23 +84,15 @@ df03 %>% knitr::kable()
 Combina 1o,2o e 3o com `bind_rows()`
 
 ```{r}
-df123 <- df01 %>%
+df01 %>%
   bind_rows(df02) %>%
   bind_rows(df03)
-```
-
-```{r,echo=F}
-df123 %>% knitr::kable()
 ```
 
 Maneira alternativa de combiná-los
 
 ```{r}
-df123a <- bind_rows(df01,df02,df03)
-```
-
-```{r,echo=F}
-df123a %>% knitr::kable()
+bind_rows(df01,df02,df03)
 ```
 
 ## Concatenação Automatizada
