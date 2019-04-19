@@ -105,7 +105,13 @@ df123a %>% knitr::kable()
 
 ## Concatenação Automatizada
 
-A concatenação automatizada de qualquer númeroi de arquivos pode ser feita através da função `map_dfr()` do pacote `purrr` (parte do `tidyverse`). Esta função itera sobre os elementos de um vetor de entrada, chamando uma função em cada iteração com o elemento iterdo, função esta que deve retornar um data frame. Ao fim da iteração `map_dfr()` retorna os data frames produzidos em cada iteração em um só. Com esta função o código torna-se bastante simples (abaixo). Note que o data frame de saída possui 27 linhas correspondentes aos 27 estados brasileiros.
+A concatenação automatizada para um número grande de arquivos é feita através da função `map_dfr()` do pacote `purrr` (parte do `tidyverse`).
+
+Esta função itera sobre os elementos de um vetor de entrada, chamando a cada iteração uma função com o elemento iterado, função esta que deve retornar um data frame.
+
+Ao fim da iteração `map_dfr()` retorna a concatenação dos data frames produzidos em cada iteração. Com esta função o código torna-se bastante simples (abaixo).
+
+Note que o data frame de saída é a concatenação dos 4 CSVs no diretório `data` e possui linhas correspondentes a todos os 27 estados brasileiros.
 
 ```{r,message=F}
 df_all <- fname_vec %>%
