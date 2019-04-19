@@ -177,7 +177,7 @@ df123a <- bind_rows(df01,df02,df03)
 Concatenação Automatizada
 -------------------------
 
-### Combina com `purrr::map_dfr()`
+Combina com `purrr::map_dfr()`, note que o data frame de saída possui 27 linhas
 
 ``` r
 df_all <- fname_vec %>%
@@ -216,7 +216,7 @@ df_all <- fname_vec %>%
 
 ### Concatenação a partir de um zip
 
-Lista arquivos dentro de um zip
+Lista arquivos no diretório `data` com a extensão "zip"
 
 ``` r
 zipfile <- dir_ls("data",regexp="\\.zip$") %>% as.character
@@ -224,17 +224,18 @@ zipfile
 #> [1] "data/capitais.zip"
 ```
 
-Lista arquivos no zip
+Lista arquivos dentro do arquivo encontrado
 
 ``` r
 fnames_zip <- zip_list(zipfile)
 ```
 
--   Função auxiliar, a ser iterada abaixo, que executará as seguintes operações em ordem:
-    -   extrai um arquivo do zipfile
-    -   deposita-o no diretorio corrente
-    -   lê data frame com `read_csv()`
-    -   deleta o arquivo.
+Função auxiliar, a ser iterada abaixo, que executará as seguintes operações:
+
+1.  extrai um arquivo do zipfile
+2.  deposita-o no diretorio corrente
+3.  lê data frame com `read_csv()`
+4.  deleta o arquivo.
 
 ``` r
 unzip_read_delete <- function(fname_csv,zipfile) {
@@ -245,7 +246,7 @@ unzip_read_delete <- function(fname_csv,zipfile) {
 }
 ```
 
-### Itera sobre arquivos no zip, concatenando-os com `map_dfr()`
+Itera sobre arquivos no zip, concatenando-os com `map_dfr()`
 
 ``` r
 df_all_map <- fnames_zip$filename %>%
