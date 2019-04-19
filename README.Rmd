@@ -101,9 +101,9 @@ A concatenação automatizada para um número grande de arquivos é feita atrav�
 
 Esta função itera sobre os elementos de um vetor de entrada, chamando a cada iteração uma função com o elemento iterado, função esta que deve retornar um data frame.
 
-Ao fim da iteração `map_dfr()` retorna a concatenação dos data frames produzidos em cada iteração. Com esta função o código torna-se bastante simples (abaixo).
+Ao longo das iterações, `map_dfr()` vai "costurando" os data frames de saída num só e retorna-o ao fim do processo, com ótima eficiência de memória.
 
-Note que o data frame de saída é a concatenação dos 4 CSVs no diretório `data` e possui linhas correspondentes a todos os 27 estados brasileiros.
+Com esta função o código torna-se bastante simples (abaixo). Note que o data frame de saída é a concatenação dos 4 CSVs no diretório `data` e possui linhas correspondentes a todos os 27 estados brasileiros.
 
 ```{r,message=F}
 df_all <- fname_vec %>%
