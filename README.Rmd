@@ -1,5 +1,5 @@
 ---
-title: "Combindando CSVs num só data frame"
+title: "Concatenando CSVs num só data frame"
 author: Thomas Jagoda & Dan Reznik
 date: Abril, 2019
 output: github_document

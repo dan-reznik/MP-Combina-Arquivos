@@ -1,4 +1,4 @@
-Combindando CSVs num só data frame
+Concatenando CSVs num só data frame
 ================
 Thomas Jagoda & Dan Reznik
 Abril, 2019
