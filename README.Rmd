@@ -1,0 +1,159 @@
+---
+title: "Combindando CSVs num só data frame"
+author: Thomas Jagoda & Dan Reznik
+date: Abril, 2019
+output: github_document
+---
+
+```{r,echo=F}
+knitr::opts_chunk$set(
+  cache=T,
+  collapse=T,
+  comment="#>",
+  dpi=96,
+  fig.align="center",
+  out.width='100%'
+)
+```
+
+## Motivação 
+
+Neste projeto mostramos algumas maneiras de combinar arquivos .csv avulsos num só data frame. Analisamos os segintes casos:
+
+* Quando os arquivos encontram-se avulsos e não compactados
+* Quando os arquivos encontram-se compactados num só "zipfile"
+
+Abaixo almejamos "montar" um só data frame com dados de 27 capitais brasileiras espalhados em 4 csvs no diretório `data` ou num zipfile.
+
+Para fins de simplificação, os arquivos tratados não possuem defeitos, já estão codificados em `UTF-8`, e têm todos o mesmo cabeçalho e número de colunas (o número de linhas é variável entre eles).
+
+### Carrega Pacotes
+
+```{r,message=F}
+library(tidyverse)
+library(fs)
+library(zip)
+```
+
+## Concatenação Manual
+
+Obtem vetor dos nomes de arquivos CSV filtrados por regexp
+
+```{r}
+fname_vec <- dir_ls("data",regexp = "capitais\\d{2}\\.csv") %>%
+  as.character
+fname_vec
+```
+
+* Carrega 1o arquivo
+
+```{r}
+df01 <- read_csv(fname_vec[1])
+```
+
+```{r,echo=F}
+df01 %>% knitr::kable()
+```
+
+* Carrega 2o arquivo
+
+```{r,message=F}
+df02 <- read_csv(fname_vec[2])
+```
+
+```{r,echo=F}
+df02 %>% knitr::kable()
+```
+
+* Combina 1o e 2o arquivo usando `bind_rows()`
+
+```{r}
+df01 %>% bind_rows(df02)
+```
+
+* Carrega 3o arquivo 
+
+```{r,message=F}
+df03 <- read_csv(fname_vec[3])
+```
+
+```{r,echo=F}
+df03 %>% knitr::kable()
+```
+
+* Combina 1o,2o, e 3o com `bind_rows()`
+```{r}
+df123 <- df01 %>%
+  bind_rows(df02) %>%
+  bind_rows(df03)
+```
+
+```{r,echo=F}
+df123 %>% knitr::kable()
+```
+
+* Maneira alternativa de combiná-los
+
+```{r}
+df123a <- bind_rows(df01,df02,df03)
+```
+
+```{r,echo=F}
+df123a %>% knitr::kable()
+```
+
+## Concatenação Automatizada
+
+### Combina com `purrr::map_dfr()`
+
+```{r,message=F}
+df_all <- fname_vec %>%
+  map_dfr(read_csv)
+```
+
+```{r,echo=F}
+df_all %>% knitr::kable()
+```
+
+### Concatenação a partir de um zip
+
+Lista arquivos dentro de um zip
+
+```{r}
+zipfile <- dir_ls("data",regexp="\\.zip$") %>% as.character
+zipfile
+```
+
+Lista arquivos no zip
+
+```{r}
+fnames_zip <- zip_list(zipfile)
+```
+
+* Função auxiliar, a ser iterada abaixo, que executará as seguintes operações em ordem:
+    + extrai um arquivo do zipfile
+    + deposita-o no diretorio corrente
+    + lê data frame com `read_csv()`
+    + deleta o arquivo.
+
+```{r}
+unzip_read_delete <- function(fname_csv,zipfile) {
+  unzip(zipfile,fname_csv)
+  df <- read_csv(fname_csv)
+  file_delete(fname_csv)
+  df # importante retornar um tibble q sera usado por map_dfr()
+}
+```
+
+### Itera sobre arquivos no zip, concatenando-os com `map_dfr()`
+
+```{r,message=F}
+df_all_map <- fnames_zip$filename %>%
+  map_dfr(unzip_read_delete,zipfile)
+# map_dfr(~unzip_read_delete(.x,zipfile))
+```
+
+```{r,echo=F}
+df_all_map %>% knitr::kable()
+```
+
