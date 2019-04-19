@@ -134,10 +134,10 @@ fnames_zip <- zip_list(zipfile)
 Função auxiliar, a ser iterada abaixo, que executará as
 seguintes operações:
 
-1. extrai um arquivo do zipfile
-1. deposita-o no diretorio corrente
+1. extrai um arquivo do zipfile no diretorio corrente
 1. lê data frame com `read_csv()`
-1. deleta o arquivo.
+1. deleta o arquivo
+1. retorna o dataframe lido para uso por `map_dfr()`
 
 ```{r}
 unzip_read_delete <- function(fname_csv,zipfile) {
