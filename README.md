@@ -6,7 +6,7 @@ Abril, 2019
 Motivação
 ---------
 
-Neste projeto mostramos algumas maneiras de combinar arquivos .csv avulsos num só data frame. Analisamos os segintes casos:
+Neste projeto mostramos como combinar arquivos .csv avulsos num só data frame de maneira manual (ok para poucos arquivos) ou automática (necessária quando nos deparamos com 100s de arquivos). Analisamos os segintes casos:
 
 -   Quando os arquivos encontram-se avulsos e não compactados
 -   Quando os arquivos encontram-se compactados num só "zipfile"
@@ -36,7 +36,7 @@ fname_vec
 #> [4] "data/capitais04.csv"
 ```
 
--   Carrega 1o arquivo
+Carrega 1o arquivo
 
 ``` r
 df01 <- read_csv(fname_vec[1])
@@ -60,7 +60,7 @@ df01 <- read_csv(fname_vec[1])
 |    4| Boa Vista      | RR  | 02º 49' 11" N | 060º 40' 24" O |     2.820|   -60.673|
 |    5| Brasília       | DF  | 15º 46' 47" S | 047º 55' 47" O |   -15.780|   -47.930|
 
--   Carrega 2o arquivo
+Carrega 2o arquivo
 
 ``` r
 df02 <- read_csv(fname_vec[2])
@@ -76,7 +76,7 @@ df02 <- read_csv(fname_vec[2])
 |   11| Goiânia       | GO  | 16º 40' 43" S | 049º 15' 14" O |   -16.679|   -49.254|
 |   12| João Pessoa   | PB  | 07º 06' 54" S | 034º 51' 47" O |    -7.115|   -34.863|
 
--   Combina 1o e 2o arquivo usando `bind_rows()`
+Combina 1o e 2o arquivo usando `bind_rows()`
 
 ``` r
 df01 %>% bind_rows(df02)
@@ -97,7 +97,7 @@ df01 %>% bind_rows(df02)
 #> 12    12 João Pessoa   PB    "07º 06' 54\"… "034º 51' 47\"…   -7.12   -34.9
 ```
 
--   Carrega 3o arquivo
+Carrega 3o arquivo
 
 ``` r
 df03 <- read_csv(fname_vec[3])
@@ -114,7 +114,7 @@ df03 <- read_csv(fname_vec[3])
 |   19| Porto Velho  | RO  | 08º 45' 43" S | 063º 54' 14" O |    -8.762|   -63.904|
 |   20| Recife       | PE  | 08º 03' 14" S | 034º 52' 52" O |    -8.054|   -34.881|
 
--   Combina 1o,2o, e 3o com `bind_rows()`
+Combina 1o,2o e 3o com `bind_rows()`
 
 ``` r
 df123 <- df01 %>%
@@ -145,7 +145,7 @@ df123 <- df01 %>%
 |   19| Porto Velho    | RO  | 08º 45' 43" S | 063º 54' 14" O |    -8.762|   -63.904|
 |   20| Recife         | PE  | 08º 03' 14" S | 034º 52' 52" O |    -8.054|   -34.881|
 
--   Maneira alternativa de combiná-los
+Maneira alternativa de combiná-los
 
 ``` r
 df123a <- bind_rows(df01,df02,df03)
@@ -177,7 +177,7 @@ df123a <- bind_rows(df01,df02,df03)
 Concatenação Automatizada
 -------------------------
 
-Combina com `purrr::map_dfr()`, note que o data frame de saída possui 27 linhas
+A concatenação automatizada de qualquer númeroi de arquivos pode ser feita através da função `map_dfr()` do pacote `purrr` (parte do `tidyverse`). Esta função itera sobre os elementos de um vetor de entrada, chamando uma função em cada iteração com o elemento iterdo, função esta que deve retornar um data frame. Ao fim da iteração `map_dfr()` retorna os data frames produzidos em cada iteração em um só. Com esta função o código torna-se bastante simples (abaixo). Note que o data frame de saída possui 27 linhas correspondentes aos 27 estados brasileiros.
 
 ``` r
 df_all <- fname_vec %>%

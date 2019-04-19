@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 ## Motivação 
 
-Neste projeto mostramos algumas maneiras de combinar arquivos .csv avulsos num só data frame. Analisamos os segintes casos:
+Neste projeto mostramos como combinar arquivos .csv avulsos num só data frame de maneira manual (ok para poucos arquivos) ou automática (necessária quando nos deparamos com 100s de arquivos). Analisamos os segintes casos:
 
 * Quando os arquivos encontram-se avulsos e não compactados
 * Quando os arquivos encontram-se compactados num só "zipfile"
@@ -45,7 +45,7 @@ fname_vec <- dir_ls("data",regexp = "capitais\\d{2}\\.csv") %>%
 fname_vec
 ```
 
-* Carrega 1o arquivo
+Carrega 1o arquivo
 
 ```{r}
 df01 <- read_csv(fname_vec[1])
@@ -55,7 +55,7 @@ df01 <- read_csv(fname_vec[1])
 df01 %>% knitr::kable()
 ```
 
-* Carrega 2o arquivo
+Carrega 2o arquivo
 
 ```{r,message=F}
 df02 <- read_csv(fname_vec[2])
@@ -65,13 +65,13 @@ df02 <- read_csv(fname_vec[2])
 df02 %>% knitr::kable()
 ```
 
-* Combina 1o e 2o arquivo usando `bind_rows()`
+Combina 1o e 2o arquivo usando `bind_rows()`
 
 ```{r}
 df01 %>% bind_rows(df02)
 ```
 
-* Carrega 3o arquivo 
+Carrega 3o arquivo 
 
 ```{r,message=F}
 df03 <- read_csv(fname_vec[3])
@@ -81,7 +81,7 @@ df03 <- read_csv(fname_vec[3])
 df03 %>% knitr::kable()
 ```
 
-* Combina 1o,2o, e 3o com `bind_rows()`
+Combina 1o,2o e 3o com `bind_rows()`
 
 ```{r}
 df123 <- df01 %>%
@@ -93,7 +93,7 @@ df123 <- df01 %>%
 df123 %>% knitr::kable()
 ```
 
-* Maneira alternativa de combiná-los
+Maneira alternativa de combiná-los
 
 ```{r}
 df123a <- bind_rows(df01,df02,df03)
@@ -105,7 +105,7 @@ df123a %>% knitr::kable()
 
 ## Concatenação Automatizada
 
-Combina com `purrr::map_dfr()`, note que o data frame de saída possui 27 linhas
+A concatenação automatizada de qualquer númeroi de arquivos pode ser feita através da função `map_dfr()` do pacote `purrr` (parte do `tidyverse`). Esta função itera sobre os elementos de um vetor de entrada, chamando uma função em cada iteração com o elemento iterdo, função esta que deve retornar um data frame. Ao fim da iteração `map_dfr()` retorna os data frames produzidos em cada iteração em um só. Com esta função o código torna-se bastante simples (abaixo). Note que o data frame de saída possui 27 linhas correspondentes aos 27 estados brasileiros.
 
 ```{r,message=F}
 df_all <- fname_vec %>%
